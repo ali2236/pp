@@ -74,7 +74,22 @@ class _MultiBusSystemDesignerState extends State<MultiBusSystemDesigner> {
               Padding(
                 padding:
                     const EdgeInsetsDirectional.only(start: 32, bottom: 16),
-                child: Text('Best Config: (${designer.bestConfig})'),
+                child: Text(
+                  'Best Config: (${designer.bestConfig})',
+                  textAlign: TextAlign.end,
+                  textDirection: TextDirection.ltr,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  'ساخته شده توسط علی قنبری',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ),
             ],
           );
