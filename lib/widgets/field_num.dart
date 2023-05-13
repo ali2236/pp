@@ -18,13 +18,14 @@ class NumberField<T extends num> extends StatelessWidget {
     final controller = TextEditingController(text: defaultValue.toString());
     return TextField(
       controller: controller,
+      textDirection: TextDirection.ltr,
       inputFormatters: [
-        if (T is int) FilteringTextInputFormatter.digitsOnly,
-        if (T is double)
+        if (T == int) FilteringTextInputFormatter.digitsOnly,
+        if (T == double)
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]+.[0-9]+'))
       ],
       onChanged: (v) {
-        final parser = T is int ? int.parse : double.parse;
+        final parser = (T == int) ? int.parse : double.parse;
         final val = parser(v);
         onChange(val as T);
       },
