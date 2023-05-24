@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pp/model/multibus_system.dart';
 import 'package:pp/widgets/field_num.dart';
 import 'package:pp/widgets/matrix_table.dart';
+import 'package:pp/widgets/title_card.dart';
 
 class MultiBusSystemDesigner extends StatefulWidget {
   const MultiBusSystemDesigner({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _MultiBusSystemDesignerState extends State<MultiBusSystemDesigner> {
         builder: (context, _) {
           return ListView(
             children: [
-              titleCard('طراح سیستم مولتی باس'),
+              const TitleCard(title: 'طراح سیستم مولتی باس'),
               const Padding(
                 padding: EdgeInsetsDirectional.only(start: 32),
                 child: Text('ورودی:'),
@@ -125,21 +126,4 @@ class _MultiBusSystemDesignerState extends State<MultiBusSystemDesigner> {
       ],
     );
   }
-
-  Widget titleCard(String title) => Container(
-        margin: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.77),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 96, horizontal: 64),
-          child: Center(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.displayMedium,
-            ),
-          ),
-        ),
-      );
 }

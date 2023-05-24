@@ -1,20 +1,8 @@
 import 'dart:math';
 
-class Cpu {
-  final int id;
-  var blocked = false;
-  var pc = 0;
-  var memoryAccesses = 0;
-  var effectiveAccesses = 0;
-  Cpu(this.id);
-
-  double get BWeffective => effectiveAccesses / memoryAccesses;
-
-  @override
-  String toString() {
-    return '(CPU_$id, pc=$pc, BWe=$BWeffective)';
-  }
-}
+import 'package:pp/model/simulation_cpu.dart';
+import 'package:pp/model/simulation_params.dart';
+import 'package:pp/model/simulation_result.dart';
 
 class MemoryRequest{
   final int time;
@@ -24,16 +12,16 @@ class MemoryRequest{
   MemoryRequest(this.time, this.cpu, this.memory);
 }
 
-void main() {
+SimulationResult simulateMultiBus(SimulationParams params) {
   // input
-  const N = 66;
-  const M = 28;
-  const B = 10;
-  const Pm = 0.04;
-  const iterations = 1e4;
+  final N = params.N;
+  final M = params.M;
+  final B = params.B;
+  final Pm = params.Pm;
+  final iterations = 1e4.toInt();
 
   // simulation entities
-  final cpus = List.generate(N, (i) => Cpu(i));
+  final cpus = List.generate(N, (i) => Cpu(i, iterations));
   final random = Random();
   bool randomMemoryAccess() => random.nextDouble() <= Pm;
   int randomMemory() => random.nextInt(M);
@@ -76,6 +64,7 @@ void main() {
     // run arbiter()
   }
 
-  print(cpus.map((c) => c.BWeffective).reduce((a, b) => a + b) / N);
-  print(cpus);
+  return SimulationResult(
+    cpus: cpus,
+  );
 }
