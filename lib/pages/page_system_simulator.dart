@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pp/model/simulation_arbiter.dart';
 import 'package:pp/model/simulation_params.dart';
 import 'package:pp/model/simulation_result.dart';
 import 'package:pp/model/system_simulator_simple.dart';
@@ -29,17 +30,24 @@ class _SystemSimulatorState extends State<SystemSimulator> {
           ),
           inputFields(),
           Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 32, vertical: 16),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 32, vertical: 16),
             child: FilledButton(
               child: const Text('محاسبه'),
               onPressed: () {
-                compute<SimulationParams, SimulationResult>(simulateMultiBus, params).then((r) {
+                compute<SimulationParams, SimulationResult>(
+                        simulateMultiBus, params)
+                    .then((r) {
                   setState(() {
                     result = r;
                   });
                 });
               },
             ),
+          ),
+         if(result != null) Padding(
+            padding: const EdgeInsetsDirectional.only(start: 32, top: 16, bottom: 16),
+            child: Text('Avg BWeffective: ${result?.BWeffective}'),
           ),
           const Padding(
             padding: EdgeInsetsDirectional.only(start: 32),
@@ -56,14 +64,18 @@ class _SystemSimulatorState extends State<SystemSimulator> {
                     DataColumn(label: Text('blocked%')),
                     DataColumn(label: Text('BW effective')),
                   ],
-                  rows: result != null ? [
-                    for(var cpu in result!.cpus)
-                    DataRow(cells: [
-                      DataCell(Text('cpu_${cpu.id}')),
-                      DataCell(Text('${(cpu.percentBlocked * 100).toStringAsFixed(1)}%')),
-                      DataCell(Text(cpu.BWeffective.toStringAsFixed(8))),
-                    ])
-                  ] : [],
+                  rows: result != null
+                      ? [
+                          for (var cpu in result!.cpus)
+                            DataRow(cells: [
+                              DataCell(Text('cpu_${cpu.id}')),
+                              DataCell(Text(
+                                  '${(cpu.percentBlocked * 100).toStringAsFixed(1)}%')),
+                              DataCell(
+                                  Text(cpu.BWeffective.toStringAsFixed(8))),
+                            ])
+                        ]
+                      : [],
                 ),
               ),
             ),
@@ -98,9 +110,29 @@ class _SystemSimulatorState extends State<SystemSimulator> {
           onChange: (v) => params.B = v,
         ),
         NumberField<double>(
-          name: 'زمان دسترسی متوسط(Pm)',
+          name: 'احتمال دسترسی(Pm)',
           defaultValue: params.Pm,
           onChange: (v) => params.Pm = v,
+        ),
+        Row(
+          children: [
+            const Text('الگوریتم آربیتر'),
+            const Spacer(),
+            DropdownMenu(
+              initialSelection: params.arbiter,
+              dropdownMenuEntries: arbiters.entries.map((e) {
+                return DropdownMenuEntry(
+                  value: e.value,
+                  label: e.key,
+                );
+              }).toList(),
+              onSelected: (arbiter) {
+                if (arbiter != null) {
+                  params.arbiter = arbiter;
+                }
+              },
+            ),
+          ],
         ),
       ],
     );

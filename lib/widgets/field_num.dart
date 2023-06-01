@@ -22,7 +22,7 @@ class NumberField<T extends num> extends StatelessWidget {
       inputFormatters: [
         if (T == int) FilteringTextInputFormatter.digitsOnly,
         if (T == double)
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]+.[0-9]+'))
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]+'))
       ],
       onChanged: (v) {
         final parser = (T == int) ? int.parse : double.parse;

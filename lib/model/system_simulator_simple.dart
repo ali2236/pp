@@ -1,16 +1,8 @@
 import 'dart:math';
-
 import 'package:pp/model/simulation_cpu.dart';
 import 'package:pp/model/simulation_params.dart';
+import 'package:pp/model/simulation_request.dart';
 import 'package:pp/model/simulation_result.dart';
-
-class MemoryRequest{
-  final int time;
-  final Cpu cpu;
-  final int memory;
-
-  MemoryRequest(this.time, this.cpu, this.memory);
-}
 
 SimulationResult simulateMultiBus(SimulationParams params) {
   // input
@@ -19,6 +11,7 @@ SimulationResult simulateMultiBus(SimulationParams params) {
   final B = params.B;
   final Pm = params.Pm;
   final iterations = 1e4.toInt();
+  final arbiter = params.arbiter;
 
   // simulation entities
   final cpus = List.generate(N, (i) => Cpu(i, iterations));
@@ -44,24 +37,9 @@ SimulationResult simulateMultiBus(SimulationParams params) {
       cpu.pc++;
     }
 
-    // run arbiter(fcfs)
-    if(reqs.isNotEmpty) {
-      int b = 0;
-      for(var m=0;m<M && b<B;m++){
-        final i = reqs.indexWhere((req) => req.memory == m);
-        if(i==-1) continue;
-        final req = reqs.removeAt(i);
-        final cpu = req.cpu;
-        if(req.time == t){
-          cpu.effectiveAccesses++;
-        }
-        cpu.blocked = false;
-        cpu.pc++;
-        b++;
-      }
-    }
+    // run arbiter
+    arbiter(params, reqs, t);
 
-    // run arbiter()
   }
 
   return SimulationResult(
