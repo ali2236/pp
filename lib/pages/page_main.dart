@@ -19,6 +19,12 @@ class _MainPageState extends State<MainPage> {
     ][index](context);
   }
 
+  void _onDestinationSelected(int i) {
+    setState(() {
+      _index = i;
+    });
+  }
+
   static const _destinations = [
     NavigationDestination(
       icon: Icon(Icons.design_services_rounded),
@@ -37,6 +43,7 @@ class _MainPageState extends State<MainPage> {
         body: pageBuilder(_index, context),
         bottomNavigationBar: NavigationBar(
           destinations: _destinations,
+          onDestinationSelected: _onDestinationSelected,
         ),
       );
     }
@@ -53,11 +60,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 )
                 .toList(),
-            onDestinationSelected: (i) {
-              setState(() {
-                _index = i;
-              });
-            },
+            onDestinationSelected: _onDestinationSelected,
           ),
           const VerticalDivider(),
           Expanded(child: pageBuilder(_index, context)),

@@ -45,10 +45,12 @@ class _SystemSimulatorState extends State<SystemSimulator> {
               },
             ),
           ),
-         if(result != null) Padding(
-            padding: const EdgeInsetsDirectional.only(start: 32, top: 16, bottom: 16),
-            child: Text('Avg BWeffective: ${result?.BWeffective}'),
-          ),
+          if (result != null)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(
+                  start: 32, top: 16, bottom: 16),
+              child: Text('Avg BWeffective: ${result?.BWeffective}'),
+            ),
           const Padding(
             padding: EdgeInsetsDirectional.only(start: 32),
             child: Text('جدول دسترسی موثر:'),
@@ -87,7 +89,7 @@ class _SystemSimulatorState extends State<SystemSimulator> {
 
   Widget inputFields() {
     return GridView.extent(
-      maxCrossAxisExtent: 480,
+      maxCrossAxisExtent: 720,
       shrinkWrap: true,
       childAspectRatio: 360 / 50,
       padding: const EdgeInsets.all(32),
@@ -115,8 +117,18 @@ class _SystemSimulatorState extends State<SystemSimulator> {
           onChange: (v) => params.Pm = v,
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('الگوریتم آربیتر'),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text(
+                'الگوریتم آربیتر',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             const Spacer(),
             DropdownMenu(
               initialSelection: params.arbiter,

@@ -101,7 +101,7 @@ class _MultiBusSystemDesignerState extends State<MultiBusSystemDesigner> {
 
   Widget inputFields() {
     return GridView.extent(
-      maxCrossAxisExtent: 480,
+      maxCrossAxisExtent: 720,
       shrinkWrap: true,
       childAspectRatio: 360 / 50,
       padding: const EdgeInsets.all(32),
