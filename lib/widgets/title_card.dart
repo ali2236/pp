@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 class TitleCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  const TitleCard({Key? key, required this.title, this.subtitle = ''}) : super(key: key);
+
+  const TitleCard({
+    Key? key,
+    required this.title,
+    this.subtitle = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,7 @@ class TitleCard extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.displayMedium,
               ),
+              const SizedBox(height: 8),
               Text(subtitle),
             ],
           ),

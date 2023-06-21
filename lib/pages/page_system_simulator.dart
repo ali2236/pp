@@ -27,7 +27,7 @@ class _SystemSimulatorState extends State<SystemSimulator> {
                 children: [
                   const TitleCard(
                       title: 'شبیه ساز سیستم مولتی باس',
-                      subtitle: 'معماری EREW'),
+                      subtitle: 'معماری EREW',),
                   const Padding(
                     padding: EdgeInsetsDirectional.only(start: 32),
                     child: Text('ورودی:'),
