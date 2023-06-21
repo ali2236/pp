@@ -33,11 +33,13 @@ abstract class SimulationArbiter {
 class DaisyChainArbiter extends SimulationArbiter {
   @override
   void _run(List<MemoryRequest> reqs, int t) {
+    final accessed = List.filled(M + 1, false);
     for (var b = 0, priority = 0; b < B && priority < N;) {
       final reqIndex = reqs.indexWhere((r) => r.cpu.id == priority);
-      if (reqIndex != -1) {
+      if (reqIndex != -1 && !accessed[reqs[reqIndex].memory]) {
         final req = reqs.removeAt(reqIndex);
         req.fulfill(t);
+        accessed[req.memory] = true;
         b++;
       }
       priority++;
@@ -58,17 +60,25 @@ class RotatingDaisyChainArbiter extends SimulationArbiter {
 
   @override
   void _run(List<MemoryRequest> reqs, int t) {
-    for (var b = 0, priority = 0; b < B && priority < N;) {
-      final cpuPriority = priorityCpu[priority] ?? priority;
-      final reqIndex = reqs.indexWhere((r) => r.cpu.id == cpuPriority);
-      if (reqIndex != -1) {
-        final req = reqs.removeAt(reqIndex);
-        req.fulfill(t);
-        b++;
-        priorityCpu[cpuPriority] = maxPriority++;
+    final accessed = List.filled(M + 1, false);
+    final reqCopy = List.of(reqs)..sort(byCpuPriority);
+    for (var b = 0, c = 0; b < B && reqs.isNotEmpty && c < reqCopy.length;c++) {
+      final req = reqCopy[c];
+      if(accessed[req.memory]){
+        continue;
       }
-      priority++;
+      reqs.remove(req);
+      req.fulfill(t);
+      accessed[req.memory] = true;
+      b++;
+      priorityCpu[req.cpu.id] = maxPriority++;
     }
+  }
+
+  int byCpuPriority(MemoryRequest r1, MemoryRequest r2){
+    final r1p = priorityCpu[r1.cpu.id] ?? r1.cpu.id;
+    final r2p = priorityCpu[r2.cpu.id] ?? r2.cpu.id;
+    return r1p.compareTo(r2p);
   }
 }
 

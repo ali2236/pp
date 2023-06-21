@@ -29,13 +29,9 @@ class _ArbiterSimulationResultState extends State<ArbiterSimulationResult> {
   @override
   void initState() {
     super.initState();
-    _calculate();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _calculate();
+    if (result == null) {
+      _calculate();
+    }
   }
 
   @override
@@ -44,8 +40,8 @@ class _ArbiterSimulationResultState extends State<ArbiterSimulationResult> {
     _calculate();
   }
 
-  void _calculate(){
-    if(mounted){
+  void _calculate() {
+    if (mounted) {
       setState(() {
         result = null;
       });
@@ -77,38 +73,94 @@ class _ArbiterSimulationResultState extends State<ArbiterSimulationResult> {
     }
     return ListView(
       children: [
-        if (result != null)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-                start: 32, top: 16, bottom: 16),
-            child: Text('Avg BWeffective: ${result?.BWeffective}'),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: DataTable(
+            rows: [
+              DataRow(
+                cells: [
+                  const DataCell(
+                    Text(
+                      'Average BW effective',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataCell(Text('${result?.BWeffective}')),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text(
+                    'Average Wait',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                  DataCell(Text('${result?.avgWait}')),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text(
+                    'Variance',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                  DataCell(Text('${result?.variance}')),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  const DataCell(Text(
+                    'Standard Deviation',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                  DataCell(Text('${result?.standardDeviation}')),
+                ],
+              ),
+            ],
+            columns: const [
+              DataColumn(
+                  label: Text(
+                'معیار',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+              DataColumn(
+                  label: Text(
+                'مقدار',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+            ],
           ),
+        ),
         const Padding(
           padding: EdgeInsetsDirectional.only(start: 32),
           child: Text('جدول دسترسی موثر:'),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
+          height: 610,
           child: Padding(
             padding: const EdgeInsets.all(32.0),
             child: Card(
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('CPU ID')),
-                  DataColumn(label: Text('blocked%')),
-                  DataColumn(label: Text('BW effective')),
-                ],
-                rows: result != null
-                    ? [
-                        for (var cpu in result!.cpus)
-                          DataRow(cells: [
-                            DataCell(Text('cpu_${cpu.id}')),
-                            DataCell(Text(
-                                '${(cpu.percentBlocked * 100).toStringAsFixed(1)}%')),
-                            DataCell(Text(cpu.BWeffective.toStringAsFixed(8))),
-                          ])
-                      ]
-                    : [],
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('CPU ID')),
+                    DataColumn(label: Text('Wait')),
+                    DataColumn(label: Text('blocked%')),
+                    DataColumn(label: Text('BW effective')),
+                  ],
+                  rows: result != null
+                      ? [
+                          for (var cpu in result!.cpus)
+                            DataRow(cells: [
+                              DataCell(Text('${cpu.id}')),
+                              DataCell(Text('${cpu.clksBlocked}')),
+                              DataCell(Text(
+                                  '${(cpu.percentBlocked * 100).toStringAsFixed(1)}%')),
+                              DataCell(
+                                  Text(cpu.BWeffective.toStringAsFixed(8))),
+                            ])
+                        ]
+                      : [],
+                ),
               ),
             ),
           ),

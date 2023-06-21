@@ -59,7 +59,7 @@ class _SystemSimulatorState extends State<SystemSimulator> {
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 1200,
+                height: 900,
                 child: TabBarView(
                   children: arbiters.values
                       .map(
