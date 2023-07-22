@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pp/pages/page_main.dart';
+import 'package:pp/pages/page_multi_bus_system_designer.dart';
+import 'package:pp/pages/page_system_simulator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +34,13 @@ class MyApp extends StatelessWidget {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         )
       ),
-      home: const MainPage(),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/' : (c) => const MainPage(),
+        '/designer' : (c) => const MultiBusSystemDesigner(),
+        '/simulation' : (c) => const SystemSimulator(),
+      },
     );
   }
 }
