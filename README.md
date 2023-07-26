@@ -13,6 +13,6 @@ Professor: Dr. Moosavi Nia
 
 ## Multi Bus System Simulator
 
-[link](https://pp.aliqanbari.ir/#/simulator)
+[link](https://pp.aliqanbari.ir/#/simulation)
 
 ![simulator](screenshots/simulator.png)
